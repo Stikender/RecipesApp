@@ -1,0 +1,19 @@
+POST http://localhost:8080/recipe
+Content-Type: application/json
+
+{
+"name" : "Test",
+"cookingTime": "30",
+  "ingredient": [
+    {
+    "name": "a",
+      "count": "5",
+      "measure_unit": "г."
+    }
+  ],
+  "instructionCooking": [
+    "step1",
+    "step2"
+]
+
+}
