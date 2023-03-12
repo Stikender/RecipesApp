@@ -1,19 +1,11 @@
-POST http://localhost:8080/recipe
+GET http://localhost:8080/ingredient/0
+###
+POST http://localhost:8080/ingredient
 Content-Type: application/json
 
 {
-"name" : "Test",
-"cookingTime": "30",
-  "ingredient": [
-    {
-    "name": "a",
-      "count": "5",
-      "measure_unit": "г."
-    }
-  ],
-  "instructionCooking": [
-    "step1",
-    "step2"
-]
-
+  "name": "milk",
+  "count": "200",
+  "measure_unit": "ml"
 }
+

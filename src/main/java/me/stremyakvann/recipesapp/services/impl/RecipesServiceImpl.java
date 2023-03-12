@@ -1,5 +1,6 @@
 package me.stremyakvann.recipesapp.services.impl;
 
+import me.stremyakvann.recipesapp.dto.RecipeDTO;
 import me.stremyakvann.recipesapp.model.Recipe;
 import me.stremyakvann.recipesapp.services.RecipesService;
 import org.springframework.stereotype.Service;
@@ -12,19 +13,21 @@ public class RecipesServiceImpl implements RecipesService {
 
 
     private int idCounter = 0;
+
     private Map<Integer, Recipe> recipes = new LinkedHashMap<>();
 
 
     @Override
-    public Recipe addRecipe(Recipe recipe) {
+    public RecipeDTO addRecipe(Recipe recipe) {
         int id = idCounter++;
-        return recipes.put(id,recipe);
+        recipes.put(id, recipe);
+        return RecipeDTO.from(id, recipe);
     }
-
-    public Recipe getRecipe(int id) {
+    @Override
+    public RecipeDTO getRecipe(int id) {
         Recipe recipe = recipes.get(id);
         if (recipe != null) {
-            return recipes.put(id, recipe);
+            return RecipeDTO.from(id, recipe);
         }
         return null;
     }
