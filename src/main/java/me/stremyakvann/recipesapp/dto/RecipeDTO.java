@@ -1,7 +1,5 @@
 package me.stremyakvann.recipesapp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import me.stremyakvann.recipesapp.model.Ingredient;
 import me.stremyakvann.recipesapp.model.Recipe;
 
