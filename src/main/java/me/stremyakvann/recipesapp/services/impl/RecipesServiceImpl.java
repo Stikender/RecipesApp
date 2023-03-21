@@ -1,11 +1,16 @@
 package me.stremyakvann.recipesapp.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.stremyakvann.recipesapp.dto.RecipeDTO;
 import me.stremyakvann.recipesapp.exception.RecipeNotFoundException;
 import me.stremyakvann.recipesapp.model.Recipe;
+import me.stremyakvann.recipesapp.services.FileServiceRecipe;
 import me.stremyakvann.recipesapp.services.RecipesService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,17 +18,24 @@ import java.util.Map;
 
 @Service
 public class RecipesServiceImpl implements RecipesService {
-
+    private final FileServiceRecipe fileServiceRecipe;
 
     private int idCounter = 0;
 
     private Map<Integer, Recipe> recipes = new LinkedHashMap<>();
 
-
+    public RecipesServiceImpl(FileServiceRecipe fileServiceRecipe) {
+        this.fileServiceRecipe = fileServiceRecipe;
+    }
+    @PostConstruct
+    private void init() {
+    readFromFile();
+    }
     @Override
     public RecipeDTO addRecipe(Recipe recipe) {
         int id = idCounter++;
         recipes.put(id, recipe);
+        saveToFile();
         return RecipeDTO.from(id, recipe);
     }
 
@@ -51,6 +63,7 @@ public class RecipesServiceImpl implements RecipesService {
             throw new RecipeNotFoundException();
         }
         recipes.put(id, recipe);
+        saveToFile();
         return RecipeDTO.from(id, editRecipe);
     }
     @Override
@@ -67,6 +80,25 @@ public class RecipesServiceImpl implements RecipesService {
         List<RecipeDTO> recipeDTOList = new ArrayList<>();
         for (Map.Entry<Integer, Recipe> entry : recipes.entrySet()) {
             recipeDTOList.remove(RecipeDTO.from(entry.getKey(), entry.getValue()));
+        }
+    }
+
+    private void saveToFile() {
+        try {
+            String json = new ObjectMapper().writeValueAsString(recipes);
+            fileServiceRecipe.saveToFile(json);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void readFromFile() {
+    String json = fileServiceRecipe.readFromFile();
+        try {
+            recipes = new ObjectMapper().readValue(json, new TypeReference<Map<Integer, Recipe>>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 }
