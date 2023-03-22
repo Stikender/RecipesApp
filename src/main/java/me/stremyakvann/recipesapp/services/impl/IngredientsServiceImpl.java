@@ -70,15 +70,14 @@ public class IngredientsServiceImpl implements IngredientsService {
         if (deleteIngredient == null) {
             throw new IngredientNotFoundException();
         }
+        saveToFile();
         return IngredientDTO.from(id, deleteIngredient);
     }
 
     @Override
     public void deleteAllIngredient() {
-        List<IngredientDTO> ingredientDTOList = new ArrayList<>();
-        for (Map.Entry<Integer, Ingredient> entry : ingredients.entrySet()) {
-            ingredientDTOList.remove(IngredientDTO.from(entry.getKey(), entry.getValue()));
-        }
+        ingredients.clear();
+        saveToFile();
     }
     private void saveToFile() {
         try {

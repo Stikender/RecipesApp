@@ -72,15 +72,14 @@ public class RecipesServiceImpl implements RecipesService {
         if (deleteRecipe == null) {
             throw new RecipeNotFoundException();
         }
+        saveToFile();
         return RecipeDTO.from(id,deleteRecipe);
     }
 
     @Override
     public void deleteAllRecipe() {
-        List<RecipeDTO> recipeDTOList = new ArrayList<>();
-        for (Map.Entry<Integer, Recipe> entry : recipes.entrySet()) {
-            recipeDTOList.remove(RecipeDTO.from(entry.getKey(), entry.getValue()));
-        }
+        recipes.clear();
+        saveToFile();
     }
 
     private void saveToFile() {
