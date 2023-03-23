@@ -7,5 +7,7 @@ public interface FileIngredientService {
 
     String readFromFile();
 
+    boolean cleanDataFile();
+
     File getDataFile();
 }

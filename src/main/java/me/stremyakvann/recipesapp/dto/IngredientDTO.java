@@ -11,6 +11,15 @@ public class IngredientDTO {
     private final int count;
     private final String measure;
 
+    public IngredientDTO() {
+        this.id = 0;
+        this.name = "";
+        this.count = 0;
+        this.measure = "";
+    }
+
+
+
 
     public static IngredientDTO from(int id, Ingredient ingredient){
         return new IngredientDTO(id, ingredient.getName(), ingredient.getCount(), ingredient.getMeasure());

@@ -21,7 +21,7 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
         try {
             cleanDataFile();
             Files.writeString(Path.of(dataFilePath, dataFileNameRecipe), json);
-            return false;
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -36,8 +36,8 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
             throw new RuntimeException(e);
         }
     }
-
-    private boolean cleanDataFile() {
+    @Override
+    public boolean cleanDataFile() {
         try {
             Path path = Path.of(dataFilePath, dataFileNameRecipe);
             Files.deleteIfExists(path);
@@ -52,4 +52,5 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
     public File getDataFile() {
         return new File(dataFilePath + "/" + dataFileNameRecipe);
     }
+
 }

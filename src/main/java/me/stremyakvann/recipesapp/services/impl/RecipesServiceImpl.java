@@ -27,10 +27,10 @@ public class RecipesServiceImpl implements RecipesService {
     public RecipesServiceImpl(FileServiceRecipe fileServiceRecipe) {
         this.fileServiceRecipe = fileServiceRecipe;
     }
-    @PostConstruct
-    private void init() {
-    readFromFile();
-    }
+//    @PostConstruct
+//    private void init() {
+//      readFromFile();
+//    }
     @Override
     public RecipeDTO addRecipe(Recipe recipe) {
         int id = idCounter++;
@@ -82,6 +82,7 @@ public class RecipesServiceImpl implements RecipesService {
         saveToFile();
     }
 
+
     private void saveToFile() {
         try {
             String json = new ObjectMapper().writeValueAsString(recipes);
@@ -92,12 +93,13 @@ public class RecipesServiceImpl implements RecipesService {
     }
 
     private void readFromFile() {
-    String json = fileServiceRecipe.readFromFile();
         try {
+            String json = fileServiceRecipe.readFromFile();
             recipes = new ObjectMapper().readValue(json, new TypeReference<Map<Integer, Recipe>>() {
             });
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
+
 }

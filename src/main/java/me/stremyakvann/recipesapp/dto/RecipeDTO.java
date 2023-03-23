@@ -5,6 +5,7 @@ import lombok.Data;
 import me.stremyakvann.recipesapp.model.Ingredient;
 import me.stremyakvann.recipesapp.model.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 @Data
 @AllArgsConstructor
@@ -16,6 +17,13 @@ public class RecipeDTO {
     private final List<Ingredient> ingredient;
     private final List<String> instructionCooking;
 
+    public RecipeDTO() {
+        this.id = 0;
+        this.name = "";
+        this.cookingTime = 0;
+        this.ingredient = new ArrayList<>();
+        this.instructionCooking = new ArrayList<>();
+    }
 
     public static RecipeDTO from(int id, Recipe recipe){
         return new RecipeDTO(id, recipe.getName(), recipe.getCookingTime(), recipe.getIngredient(), recipe.getInstructionCooking());   };

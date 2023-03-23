@@ -72,4 +72,5 @@ public class RecipeController {
     recipesServiceImpl.deleteAllRecipe();
     }
 
+
 }

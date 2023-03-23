@@ -21,7 +21,7 @@ public class FileIngredientServiceImpl implements FileIngredientService {
         try {
             cleanDataFile();
             Files.writeString(Path.of(dataFilePath, dataFileNameIngredient), json);
-            return false;
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -36,8 +36,8 @@ public class FileIngredientServiceImpl implements FileIngredientService {
             throw new RuntimeException(e);
         }
     }
-
-    private boolean cleanDataFile() {
+    @Override
+    public boolean cleanDataFile() {
         try {
             Path path = Path.of(dataFilePath, dataFileNameIngredient);
             Files.deleteIfExists(path);
