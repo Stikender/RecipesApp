@@ -17,5 +17,12 @@ public class Recipe {
     private List <Ingredient> ingredient;
     private List<String> instructionCooking;
 
-
+    @Override
+    public String toString() {
+        return "Рецепт " + "\n" +
+                getName() + '\n' +
+                "Время приготовления = " + cookingTime + " минут" + "\n"+
+                "Ингридиенты: " + ingredient + "\n"+
+                "Инструкция приготовления: " + instructionCooking;
+    }
 }

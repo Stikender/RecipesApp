@@ -1,6 +1,10 @@
 package me.stremyakvann.recipesapp.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.stremyakvann.recipesapp.dto.RecipeDTO;
 import me.stremyakvann.recipesapp.model.Recipe;
@@ -25,6 +29,25 @@ public class RecipeController {
             summary = "Поиск всех рецептов",
             description = "Поиск осуществляется без заданных параметров"
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Все рецепты найдены",
+                    content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Recipe.class))}),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Введен неверный URL",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Во время выполнения запроса произошла ошибка на сервере",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            )
+    })
     public List<RecipeDTO> getAllRecipes() {
         return recipesServiceImpl.getAllRecipes();    }
     @GetMapping("/{id}")
@@ -32,6 +55,31 @@ public class RecipeController {
             summary = "Поиск рецепта по id(номеру)",
             description = "Поиск осуществляется по параметру id(номер)"
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Найден рецепт по id",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Введен неверный id, рецепт не найден",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Введен неверный URL",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Во время выполнения запроса произошла ошибка на сервере",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            )
+    })
     public RecipeDTO getRecipe(@PathVariable("id") int id) {
         return recipesServiceImpl.getRecipe(id);
     }
@@ -41,6 +89,25 @@ public class RecipeController {
             summary = "Добавление рецепта",
             description = "Добавление осуществляется по заданным параметрам"
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Рецепт добавлен",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Введен неверный URL",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Во время выполнения запроса произошла ошибка на сервере",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            )
+    })
     public RecipeDTO addRecipe(@RequestBody Recipe recipe) {
         return recipesServiceImpl.addRecipe(recipe);
     }
@@ -50,6 +117,31 @@ public class RecipeController {
             summary = "Редактирование рецепта",
             description = "Возможно редактирование любого заданного параметра"
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Редактирование рецепта по id выполнено",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Введен неверный id, рецепт не отредактирован",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Введен неверный URL",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Во время выполнения запроса произошла ошибка на сервере",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            )
+    })
     public RecipeDTO editRecipe(@PathVariable("id") int id, @RequestBody Recipe recipe) {
         return recipesServiceImpl.editRecipe(id,recipe);
     }
@@ -59,6 +151,31 @@ public class RecipeController {
             summary = "Удаление рецепта",
             description = "Поиск и удаление осуществляется по id(номеру)"
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Удаление рецепта по id выполнено",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Введен неверный id, рецепт не удален",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Введен неверный URL",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Во время выполнения запроса произошла ошибка на сервере",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            )
+    })
     public RecipeDTO deleteRecipe(@PathVariable("id") int id) {
         return recipesServiceImpl.deleteRecipe(id);
     }
@@ -68,6 +185,25 @@ public class RecipeController {
             summary = "Удаление всех рецептов",
             description = "Поиск и удаление осуществляется без параметров"
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Удаление всех рецептов выполнено",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Введен неверный URL",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Во время выполнения запроса произошла ошибка на сервере",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Recipe.class))}
+            )
+    })
     public void deleteAllRecipe() {
     recipesServiceImpl.deleteAllRecipe();
     }

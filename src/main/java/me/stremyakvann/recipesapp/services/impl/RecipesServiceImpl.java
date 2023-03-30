@@ -19,18 +19,19 @@ import java.util.Map;
 @Service
 public class RecipesServiceImpl implements RecipesService {
     private final FileServiceRecipe fileServiceRecipe;
-
+    private final ObjectMapper objectMapper;
     private int idCounter = 0;
 
     private Map<Integer, Recipe> recipes = new LinkedHashMap<>();
 
-    public RecipesServiceImpl(FileServiceRecipe fileServiceRecipe) {
+    public RecipesServiceImpl(FileServiceRecipe fileServiceRecipe, ObjectMapper objectMapper) {
         this.fileServiceRecipe = fileServiceRecipe;
+        this.objectMapper = objectMapper;
     }
-//    @PostConstruct
-//    private void init() {
-//      readFromFile();
-//    }
+    @PostConstruct
+    private void init() {
+      readFromFile();
+    }
     @Override
     public RecipeDTO addRecipe(Recipe recipe) {
         int id = idCounter++;
@@ -81,7 +82,6 @@ public class RecipesServiceImpl implements RecipesService {
         recipes.clear();
         saveToFile();
     }
-
 
     private void saveToFile() {
         try {

@@ -1,13 +1,22 @@
 package me.stremyakvann.recipesapp.services.impl;
 
+import me.stremyakvann.recipesapp.model.Recipe;
 import me.stremyakvann.recipesapp.services.FileServiceRecipe;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 @Service
 public class FileServiceRecipeImpl implements FileServiceRecipe {
@@ -15,6 +24,48 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
     private String dataFilePath;
     @Value("${name.of.data.recipe.file}")
     private String dataFileNameRecipe;
+
+    @Override
+    public ResponseEntity<InputStreamResource> downloadDataFileRecipe() throws FileNotFoundException {
+        File fileRecipe = getDataFile();
+        if (fileRecipe.exists()) {
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(fileRecipe));
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .contentLength(fileRecipe.length())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"RecipesLog.json\"")
+                    .body(resource);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+    @Override
+    public ResponseEntity<InputStreamResource> downloadRecipeTxt() throws FileNotFoundException {
+        File fileRecipe = getDataFile();
+        if (fileRecipe.exists()) {
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(fileRecipe));
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_XML)
+                    .contentLength(fileRecipe.length())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"RecipesLog.txt\"")
+                    .body(resource);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+    @Override
+    public ResponseEntity<Void> uploadDataFileRecipe(@RequestParam MultipartFile fileRecipe) {
+        cleanDataFile();
+        File dataFileRecipe = getDataFile();
+
+        try (FileOutputStream fos = new FileOutputStream(dataFileRecipe)) {
+            IOUtils.copy(fileRecipe.getInputStream(), fos);
+            return ResponseEntity.ok().build();
+        }  catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
 
     @Override
     public boolean saveToFile(String json) {
