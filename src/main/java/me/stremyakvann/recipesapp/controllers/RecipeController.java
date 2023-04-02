@@ -112,6 +112,10 @@ public class RecipeController {
         return recipesServiceImpl.addRecipe(recipe);
     }
 
+    @PostMapping("/txt")
+    public RecipeDTO addRecipeTxt(@RequestBody Recipe recipe) {
+        return recipesServiceImpl.addRecipeTxt(recipe);
+    }
     @PutMapping("/{id}")
     @Operation(
             summary = "Редактирование рецепта",

@@ -25,6 +25,14 @@ public class RecipeDTO {
         this.instructionCooking = new ArrayList<>();
     }
 
+    @Override
+    public String toString() {
+        return "Рецепт " + "\n" +
+                getName() + '\n' +
+                "Время приготовления = " + getCookingTime() + " минут" + "\n"+
+                "Ингридиенты: " + getIngredient() + "\n"+
+                "Инструкция приготовления: " + getInstructionCooking();
+    }
     public static RecipeDTO from(int id, Recipe recipe){
         return new RecipeDTO(id, recipe.getName(), recipe.getCookingTime(), recipe.getIngredient(), recipe.getInstructionCooking());   };
 }

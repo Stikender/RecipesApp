@@ -17,12 +17,21 @@ public interface FileServiceRecipe {
 
     ResponseEntity<Void> uploadDataFileRecipe(@RequestParam MultipartFile fileRecipe);
 
+    ResponseEntity<Void> uploadRecipeTxt(@RequestParam MultipartFile fileRecipe);
+
     boolean saveToFile(String json);
+
+    boolean saveToFileTxt(String txt);
 
     String readFromFile();
 
+    String readFromFileTxt();
+
     boolean cleanDataFile();
+
+    boolean cleanDataFileTxt();
 
     File getDataFile();
 
+    File getDataFileTxt();
 }

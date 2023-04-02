@@ -9,6 +9,8 @@ public interface RecipesService {
 
     public RecipeDTO addRecipe(Recipe recipe);
 
+    RecipeDTO addRecipeTxt(Recipe recipe);
+
     List<RecipeDTO> getAllRecipes();
 
     public RecipeDTO getRecipe(int id);
