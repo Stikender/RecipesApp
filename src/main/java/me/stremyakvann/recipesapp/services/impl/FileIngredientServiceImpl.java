@@ -1,16 +1,8 @@
 package me.stremyakvann.recipesapp.services.impl;
 
 import me.stremyakvann.recipesapp.services.FileIngredientService;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -23,32 +15,6 @@ public class FileIngredientServiceImpl implements FileIngredientService {
     @Value("${name.of.data.ingredient.file}")
     private String dataFileNameIngredient;
 
-//    @Override
-//    public ResponseEntity<InputStreamResource> downloadDataFileIngredient() throws FileNotFoundException {
-//        File fileIngredient = getDataFile();
-//        if (fileIngredient.exists()) {
-//            InputStreamResource resource = new InputStreamResource(new FileInputStream(fileIngredient));
-//            return ResponseEntity.ok()
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .contentLength(fileIngredient.length())
-//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"IngredientLog.json\"")
-//                    .body(resource);
-//        } else {
-//            return ResponseEntity.noContent().build();
-//        }
-//    }
-//    @Override
-//    public ResponseEntity<Void> uploadDataFileIngredient(@RequestParam MultipartFile fileIngredient) {
-//        cleanDataFile();
-//        File dataFileIngredient = getDataFile();
-//        try (FileOutputStream fosIngredient = new FileOutputStream(dataFileIngredient)) {
-//            IOUtils.copy(fileIngredient.getInputStream(), fosIngredient);
-//            return ResponseEntity.ok().build();
-//        }  catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//    }
     @Override
     public boolean saveToFile(String json) {
         try {
