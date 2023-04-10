@@ -23,32 +23,32 @@ public class FileIngredientServiceImpl implements FileIngredientService {
     @Value("${name.of.data.ingredient.file}")
     private String dataFileNameIngredient;
 
-    @Override
-    public ResponseEntity<InputStreamResource> downloadDataFileIngredient() throws FileNotFoundException {
-        File fileIngredient = getDataFile();
-        if (fileIngredient.exists()) {
-            InputStreamResource resource = new InputStreamResource(new FileInputStream(fileIngredient));
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .contentLength(fileIngredient.length())
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"IngredientLog.json\"")
-                    .body(resource);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
-    }
-    @Override
-    public ResponseEntity<Void> uploadDataFileIngredient(@RequestParam MultipartFile fileIngredient) {
-        cleanDataFile();
-        File dataFileIngredient = getDataFile();
-        try (FileOutputStream fos = new FileOutputStream(dataFileIngredient)) {
-            IOUtils.copy(fileIngredient.getInputStream(), fos);
-            return ResponseEntity.ok().build();
-        }  catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
+//    @Override
+//    public ResponseEntity<InputStreamResource> downloadDataFileIngredient() throws FileNotFoundException {
+//        File fileIngredient = getDataFile();
+//        if (fileIngredient.exists()) {
+//            InputStreamResource resource = new InputStreamResource(new FileInputStream(fileIngredient));
+//            return ResponseEntity.ok()
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .contentLength(fileIngredient.length())
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"IngredientLog.json\"")
+//                    .body(resource);
+//        } else {
+//            return ResponseEntity.noContent().build();
+//        }
+//    }
+//    @Override
+//    public ResponseEntity<Void> uploadDataFileIngredient(@RequestParam MultipartFile fileIngredient) {
+//        cleanDataFile();
+//        File dataFileIngredient = getDataFile();
+//        try (FileOutputStream fosIngredient = new FileOutputStream(dataFileIngredient)) {
+//            IOUtils.copy(fileIngredient.getInputStream(), fosIngredient);
+//            return ResponseEntity.ok().build();
+//        }  catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//    }
     @Override
     public boolean saveToFile(String json) {
         try {

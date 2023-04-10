@@ -9,9 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public interface FileIngredientService {
-    ResponseEntity<InputStreamResource> downloadDataFileIngredient() throws FileNotFoundException;
-
-    ResponseEntity<Void> uploadDataFileIngredient(@RequestParam MultipartFile fileIngredient);
 
     boolean saveToFile(String json);
 

@@ -5,12 +5,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.stremyakvann.recipesapp.dto.RecipeDTO;
 import me.stremyakvann.recipesapp.exception.RecipeNotFoundException;
+import me.stremyakvann.recipesapp.model.Ingredient;
 import me.stremyakvann.recipesapp.model.Recipe;
 import me.stremyakvann.recipesapp.services.FileServiceRecipe;
 import me.stremyakvann.recipesapp.services.RecipesService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,15 +30,11 @@ public class RecipesServiceImpl implements RecipesService {
         this.fileServiceRecipe = fileServiceRecipe;
         this.objectMapper = objectMapper;
     }
-//    @PostConstruct
-//    private void init() {
-//      readFromFile();
-//    }
-
     @PostConstruct
-    private void initTxt() {
-        readFromFileTxt();
+    private void init() {
+      readFromFile();
     }
+
     @Override
     public RecipeDTO addRecipe(Recipe recipe) {
         int id = idCounter++;
@@ -44,14 +42,6 @@ public class RecipesServiceImpl implements RecipesService {
         saveToFile();
         return RecipeDTO.from(id, recipe);
     }
-    @Override
-    public RecipeDTO addRecipeTxt(Recipe recipe) {
-        int id = idCounter++;
-        recipes.put(id, recipe);
-        saveToFileTxt();
-        return RecipeDTO.from(id, recipe);
-    }
-
     @Override
     public List<RecipeDTO> getAllRecipes() {
     List<RecipeDTO> recipeDTOList = new ArrayList<>();
@@ -103,15 +93,6 @@ public class RecipesServiceImpl implements RecipesService {
             throw new RuntimeException(e);
         }
     }
-    private void saveToFileTxt() {
-        try {
-            String txt = new ObjectMapper().writeValueAsString(recipes);
-            fileServiceRecipe.saveToFileTxt(txt);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private void readFromFile() {
         try {
             String json = fileServiceRecipe.readFromFile();
@@ -121,14 +102,23 @@ public class RecipesServiceImpl implements RecipesService {
             throw new RuntimeException(e);
         }
     }
-    private void readFromFileTxt() {
-        try {
-            String txt = fileServiceRecipe.readFromFileTxt();
-            recipes = new ObjectMapper().readValue(txt, new TypeReference<Map<Integer, Recipe>>() {
-            });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+
+    @Override
+    public void recipeTxtFormatter(PrintWriter writer) {
+        for (Recipe recipe : this.recipes.values()) {
+            writer.println(recipe.getName());
+            writer.println("Время приготовления: "+ recipe.getCookingTime() +" минут.");
+            writer.println("Ингридиенты:");
+            for (Ingredient ingredient : recipe.getIngredient()) {
+                writer.println(ingredient.getName() + " - " + ingredient.getCount() + " " +
+                        ingredient.getMeasure() + ".");
+            }
+            writer.println("Инструкция приготовления:");
+            for (int i = 0; i < recipe.getInstructionCooking().size(); i++) {
+                writer.println(i+1 +". " + recipe.getInstructionCooking().get(i) + ".");
+            }
         }
+        writer.flush();
     }
 
 

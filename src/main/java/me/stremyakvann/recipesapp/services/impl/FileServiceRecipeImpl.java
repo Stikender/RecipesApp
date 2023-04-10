@@ -23,64 +23,32 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
     @Value("${name.of.data.recipe.file}")
     private String dataFileNameRecipe;
 
-    @Value("${name.of.data.recipe.file.txt}")
-    private String dataFileNameRecipeTxt;
-    @Override
-    public ResponseEntity<InputStreamResource> downloadDataFileRecipe() throws FileNotFoundException {
-        File fileRecipe = getDataFile();
-        if (fileRecipe.exists()) {
-            InputStreamResource resource = new InputStreamResource(new FileInputStream(fileRecipe));
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .contentLength(fileRecipe.length())
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"RecipesLog.json\"")
-                    .body(resource);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
-    }
-    @Override
-    public ResponseEntity<InputStreamResource> downloadRecipeTxt() throws FileNotFoundException {
-        File fileRecipeTxt = getDataFileTxt();
-        if (fileRecipeTxt.exists()) {
-            InputStreamResource resource = new InputStreamResource(new FileInputStream(fileRecipeTxt));
-            return ResponseEntity.ok()
-                    .contentType(MediaType.TEXT_XML)
-                    .contentLength(fileRecipeTxt.length())
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"RecipesLog.txt\"")
-                    .body(resource);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
-    }
-    @Override
-    public ResponseEntity<Void> uploadDataFileRecipe(@RequestParam MultipartFile fileRecipe) {
-        cleanDataFile();
-        File dataFileRecipe = getDataFile();
-
-        try (FileOutputStream fos = new FileOutputStream(dataFileRecipe)) {
-            IOUtils.copy(fileRecipe.getInputStream(), fos);
-            return ResponseEntity.ok().build();
-        }  catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-
-    @Override
-    public ResponseEntity<Void> uploadRecipeTxt(@RequestParam MultipartFile fileRecipe) {
-        cleanDataFileTxt();
-        File dataRecipeTxt = getDataFileTxt();
-
-        try (FileOutputStream fos = new FileOutputStream(dataRecipeTxt)) {
-            IOUtils.copy(fileRecipe.getInputStream(), fos);
-            return ResponseEntity.ok().build();
-        }  catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-
+//    @Override
+//    public ResponseEntity<InputStreamResource> downloadDataFileRecipe() throws FileNotFoundException {
+//        File fileRecipe = getDataFile();
+//        if (fileRecipe.exists()) {
+//            InputStreamResource resource = new InputStreamResource(new FileInputStream(fileRecipe));
+//            return ResponseEntity.ok()
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .contentLength(fileRecipe.length())
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"RecipesLog.json\"")
+//                    .body(resource);
+//        } else {
+//            return ResponseEntity.noContent().build();
+//        }
+//    }
+//    @Override
+//    public ResponseEntity<Void> uploadDataFileRecipe(@RequestParam MultipartFile fileRecipe) {
+//        cleanDataFile();
+//        File dataFileRecipe = getDataFile();
+//        try (FileOutputStream fos = new FileOutputStream(dataFileRecipe)) {
+//            IOUtils.copy(fileRecipe.getInputStream(), fos);
+//            return ResponseEntity.ok().build();
+//        }  catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//    }
     @Override
     public boolean saveToFile(String json) {
         try {
@@ -93,29 +61,9 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
         }
     }
     @Override
-    public boolean saveToFileTxt(String txt) {
-        try {
-            cleanDataFile();
-            Files.writeString(Path.of(dataFilePath, dataFileNameRecipeTxt), txt);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    @Override
     public String readFromFile() {
         try {
             return Files.readString(Path.of(dataFilePath, dataFileNameRecipe));
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-    @Override
-    public String readFromFileTxt() {
-        try {
-            return Files.readString(Path.of(dataFilePath, dataFileNameRecipeTxt));
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -134,24 +82,8 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
         }
     }
     @Override
-    public boolean cleanDataFileTxt() {
-        try {
-            Path path = Path.of(dataFilePath, dataFileNameRecipeTxt);
-            Files.deleteIfExists(path);
-            Files.createFile(path);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    @Override
     public File getDataFile() {
         return new File(dataFilePath + "/" + dataFileNameRecipe);
     }
 
-    @Override
-    public File getDataFileTxt() {
-        return new File(dataFilePath + "/" + dataFileNameRecipeTxt);
-    }
 }
