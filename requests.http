@@ -1,0 +1,11 @@
+GET http://localhost:8080/ingredient/0
+###
+POST http://localhost:8080/ingredient
+Content-Type: application/json
+
+{
+  "name": "milk",
+  "count": "200",
+  "measure_unit": "ml"
+}
+
